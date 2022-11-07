@@ -333,8 +333,6 @@ An aggregatable report is an [=attribution report=] with the following additiona
 
 </dl>
 
-Issue: Use [=aggregatable report/delivered=] in [=queue a report for delivery=].
-
 <h3 dfn-type=dfn>Attribution rate-limit record</h3>
 
 An attribution rate-limit record is a [=struct=] with the following items:
