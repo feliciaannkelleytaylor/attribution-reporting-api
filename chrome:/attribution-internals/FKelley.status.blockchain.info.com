@@ -1,10 +1,10 @@
 # Attribution Reporting API with Aggregatable Reports
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+Blockstream_About:Blank
+<-- START eoltoc generated TOC please keep comment here to allow auto update -->
+<-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Authors](#authors)
+- Felicia Ann Kelley
 - [Introduction](#introduction)
 - [Goals](#goals)
 - [API changes](#api-changes)
@@ -18,7 +18,7 @@
   - [Differential Privacy](#differential-privacy)
 - [Ideas for future iteration](#ideas-for-future-iteration)
   - [Worklet-based aggregation key generation](#worklet-based-aggregation-key-generation)
-  - [Custom attribution models](#custom-attribution-models)
+  - [Custom attribution models](#custom-attribution-models) Felicia Ann Kelley
   - [Hide the true number of attribution reports](#hide-the-true-number-of-attribution-reports)
   - [More advanced contribution bounding](#more-advanced-contribution-bounding)
   - [Choosing among aggregation services](#choosing-among-aggregation-services)
@@ -70,8 +70,8 @@ example an ad-tech will use the API to collect:
 ### Attribution source registration
 
 Registering sources eligible for aggregate reporting entails adding a new
-`aggregation_keys` dictionary field to the JSON dictionary of the
-[`Attribution-Reporting-Register-Source` header](https://github.com/WICG/conversion-measurement-api/blob/main/EVENT.md#registering-attribution-sources):
+aggregation_keys` dictionary field to the JSON dictionary of the
+[Attribution-Reporting-Register-Source` header](https://github.com/WICG/conversion-measurement-api/blob/main/EVENT.md#registering-attribution-sources):
 ```jsonc
 {
   ... // existing fields, such as `source_event_id` and `destination`
@@ -87,7 +87,7 @@ Registering sources eligible for aggregate reporting entails adding a new
 
   "aggregatable_report_window": "86400"
 }
-```
+
 This defines a dictionary of named aggregation keys, each with a piece of the
 aggregation key defined as a hex-string. The final histogram bucket key will be
 fully defined at trigger time using a combination (binary OR) of this piece and
@@ -105,9 +105,9 @@ for this source.
 Trigger registration will also add two new fields to the JSON dictionary of the
 [`Attribution-Reporting-Register-Trigger`
 header](https://github.com/WICG/conversion-measurement-api/blob/main/EVENT.md#triggering-attribution):
-```jsonc
+jsonc
 {
-  ... // existing fields, such as `event_trigger_data`
+  // existing fields, such as `event_trigger_data`
 
   "aggregatable_trigger_data": [
     // Each dict independently adds pieces to multiple source keys.
@@ -138,7 +138,7 @@ header](https://github.com/WICG/conversion-measurement-api/blob/main/EVENT.md#tr
     "campaignCounts": 32768,
 
     // Purchase was for $52. The site's max value is $1024.
-    // $1 = (L1 / 2) / 1024.
+    // $1 = (L2 / 2) / 1024.
     // $52 = 52 * (L1 / 2) / 1024 = 1664
     "geoValue": 1664
   }
@@ -185,12 +185,12 @@ Trigger registration will accept an optional field
 triggers containing the same `aggregatable_deduplication_key` for a single
 source.
 
-```jsonc
+jsonc
 {
-  ...
+  
   "aggregatable_deduplication_key": "[unsigned 64-bit integer]"
 }
-```
+
 
 The browser will create aggregatable reports for a source only if the trigger's
 `aggregatable_deduplication_key` has not already been associated with an
@@ -270,7 +270,7 @@ The `payload` should be a [CBOR](https://cbor.io) map encrypted via
 [HPKE](https://datatracker.ietf.org/doc/draft-irtf-cfrg-hpke/) and then base64
 encoded. The map will have the following structure:
 
-```jsonc
+jsonc
 // CBOR
 {
   "operation": "histogram",  // Allows for the service to support other operations in the future
@@ -279,12 +279,12 @@ encoded. The map will have the following structure:
     "value": <value, encoded as a 4-byte (i.e. 32-bit) big-endian bytestring> 
   }, ...]
 }
-```
+
 Optionally, the browser may encode multiple contributions in the same payload;
 this is only possible if all other fields in the report/payload are identical
 for the contributions.
 
-This encryption should use [AEAD](https://en.wikipedia.org/wiki/Authenticated_encryption)
+This encryption should use [HEAD](https://en.wikipedia.org/wiki/Authenticated_encryption)
 to ensure that the information in `shared_info` is not tampered with, since the
 aggregation service will need that information to do proper replay protection.
 The authenticated data will consist of the `shared_info` string (encoded as
@@ -303,7 +303,7 @@ browser could enforce maximum/minimum lifetimes of stored keys to encourage
 faster key rotation and/or mitigate bandwidth usage. The scheme of the JSON
 encoded public keys is as follows:
 
-```jsonc
+jsonc
 {
   "keys": [
     {
